@@ -12,7 +12,7 @@ It is **not** an attach/detach operation performed by a code running on a node, 
 
 ## Overview
 
-The external-attacher is an external controller that monitors `VolumeAttachment` objects created by controller-manager and attaches/detaches volumes to/from nodes (i.e. calls `ControllerPublish`/`ControllerUnpublish`. Full design can be found at Kubernetes proposal at [container-storage-interface.md](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/storage/container-storage-interface.md)
+The external-attacher is an external controller that monitors `VolumeAttachment` objects created by controller-manager and attaches/detaches volumes to/from nodes (i.e. calls `ControllerPublish`/`ControllerUnpublish`. Full design can be found at Kubernetes proposal at [container-storage-interface.md](https://github.com/kubernetes/design-proposals-archive/blob/main/storage/container-storage-interface.md)
 
 ## Compatibility
 
@@ -83,7 +83,7 @@ Note that the external-attacher does not scale with more replicas. Only one exte
 
 * `--leader-election-retry-period <duration>`: Duration, in seconds, the LeaderElector clients should wait between tries of actions. Defaults to 5 seconds.
 
-* `--default-fstype <type>`: The default filesystem type of the volume to publish. Defaults to `ext4`.
+* `--default-fstype <type>`: The default filesystem type of the volume to publish. Defaults to empty string.
 
 #### Other recognized arguments
 
