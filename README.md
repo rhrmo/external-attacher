@@ -19,8 +19,8 @@ The external-attacher is an external controller that monitors `VolumeAttachment`
 This information reflects the head of this branch.
 
 | Compatible with CSI Version                                                                | Container Image                     | [Min K8s Version](https://kubernetes-csi.github.io/docs/kubernetes-compatibility.html#minimum-version) | [Recommended K8s Version](https://kubernetes-csi.github.io/docs/kubernetes-compatibility.html#recommended-version) |
-| ------------------------------------------------------------------------------------------ | ------------------------------------| ---- | ---- |
-| [CSI Spec v1.5.0](https://github.com/container-storage-interface/spec/releases/tag/v1.5.0) | k8s.gcr.io/sig-storage/csi-attacher | 1.17 | 1.22 |
+| ------------------------------------------------------------------------------------------ | -----------------------------------------| ---- | ---- |
+| [CSI Spec v1.5.0](https://github.com/container-storage-interface/spec/releases/tag/v1.5.0) | registry.k8s.io/sig-storage/csi-attacher | 1.17 | 1.22 |
 
 ## Feature Status
 
@@ -62,6 +62,8 @@ Note that the external-attacher does not scale with more replicas. Only one exte
 * `--timeout <duration>`: Timeout of all calls to CSI driver. It should be set to value that accommodates majority of `ControllerPublish` and `ControllerUnpublish` calls. See [CSI error and timeout handling](#csi-error-and-timeout-handling) for details. 15 seconds is used by default.
 
 * `--worker-threads`: The number of goroutines for processing VolumeAttachments. 10 workers is used by default.
+
+* `--max-entries`: The max number of entries per page for processing ListVolumes. 0 means no limit and it is the default value.
 
 * `--retry-interval-start`: The exponential backoff for failures. See [CSI error and timeout handling](#csi-error-and-timeout-handling) for details. 1 second is used by default.
 
