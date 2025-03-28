@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 
 	"k8s.io/apimachinery/pkg/runtime"
@@ -281,21 +282,29 @@ func main() {
 	)
 
 	// handle SIGTERM and SIGINT by cancelling the context.
-	shutdownCtx, cancel := context.WithCancel(ctx)
+	ctx, terminate := context.WithCancel(ctx)
+	runCtx, cancelRun := context.WithCancel(ctx)
 	shutdownHandler := server.SetupSignalHandler()
-	ctx, terminate := context.WithCancel(shutdownCtx)
 	defer terminate()
 
+	var signalReceived bool
+
 	go func() {
-		defer cancel()
+		defer cancelRun()
 		<-shutdownHandler
+		signalReceived = true
 		klog.Infof("Received SIGTERM or SIGINT signal, shutting down controller.")
 	}()
 
 	run := func(ctx context.Context) {
-		stopCh := ctx.Done()
+		var wg sync.WaitGroup
+		stopCh := shutdownHandler
 		factory.Start(stopCh)
-		ctrl.Run(ctx, int(*workerThreads))
+		ctrl.Run(runCtx, int(*workerThreads), &wg)
+		if signalReceived {
+			wg.Wait()
+			terminate()
+		}
 	}
 
 	if !*enableLeaderElection {
