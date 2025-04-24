@@ -138,12 +138,12 @@ func (ctrl *CSIAttachController) Run(ctx context.Context, workers int, wg *sync.
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			go wait.UntilWithContext(ctx, ctrl.syncVA, 0)
+			wait.UntilWithContext(ctx, ctrl.syncVA, 0)
 		}()
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			go wait.UntilWithContext(ctx, ctrl.syncPV, 0)
+			wait.UntilWithContext(ctx, ctrl.syncPV, 0)
 		}()
 	}
 
@@ -151,7 +151,7 @@ func (ctrl *CSIAttachController) Run(ctx context.Context, workers int, wg *sync.
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			go wait.UntilWithContext(ctx, func(ctx context.Context) {
+			wait.UntilWithContext(ctx, func(ctx context.Context) {
 				err := ctrl.handler.ReconcileVA(ctx)
 				if err != nil {
 					logger.Error(err, "Failed to reconcile VolumeAttachment")
